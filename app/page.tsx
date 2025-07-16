@@ -18,12 +18,15 @@ export interface DiaryEntry {
   aiResponse: string
 }
 
+type TabType = 'write' | 'mydiary';
+
 export default function Home() {
   const { user, loading } = useAuth()
   const [selectedEmotion, setSelectedEmotion] = useState<Emotion | null>(null)
   const [diaryContent, setDiaryContent] = useState('')
   const [aiResponse, setAiResponse] = useState('')
   const [isLoading, setIsLoading] = useState(false)
+  const [tab, setTab] = useState<TabType>('write');
 
   const handleEmotionSelect = (emotion: Emotion) => {
     setSelectedEmotion(emotion)
@@ -65,7 +68,11 @@ export default function Home() {
 
   // 로그인하지 않은 경우 인증 페이지 표시
   if (!user) {
-    return <AuthPage />
+    return (
+      <div style={{ zIndex: 10, position: 'relative' }}>
+        <AuthPage />
+      </div>
+    );
   }
 
   // 로그인한 경우 메인 앱 표시
@@ -73,42 +80,99 @@ export default function Home() {
     <main className="min-h-screen p-4">
       <div className="max-w-4xl mx-auto">
         <Header />
-        
-        <div className="mt-8 space-y-8">
-          {/* 감정 선택 섹션 */}
-          <section className="bg-white rounded-2xl p-6 shadow-lg">
-            <h2 className="text-2xl font-bold text-gray-800 mb-4">
-              오늘의 기분은 어떠세요?
-            </h2>
-            <EmotionSelector 
-              selectedEmotion={selectedEmotion}
-              onEmotionSelect={handleEmotionSelect}
-            />
-          </section>
-
-          {/* 일기 작성 섹션 */}
-          {selectedEmotion && (
-            <section className="bg-white rounded-2xl p-6 shadow-lg animate-slide-up">
-              <DiaryEditor
-                emotion={selectedEmotion}
-                content={diaryContent}
-                onContentChange={setDiaryContent}
-                onSubmit={handleDiarySubmit}
-                isLoading={isLoading}
-              />
-            </section>
-          )}
-
-          {/* AI 응답 섹션 */}
-          {aiResponse && (
-            <section className="bg-white rounded-2xl p-6 shadow-lg animate-slide-up">
-              <AIResponse 
-                emotion={selectedEmotion!}
-                response={aiResponse}
-              />
-            </section>
-          )}
+        {/* 탭 UI */}
+        <div className="flex gap-0.5 mt-8 mb-8">
+          <button
+            className={`px-1 py-0.5 rounded font-medium text-xs transition-all duration-200 border ${tab === 'write' ? 'bg-white text-[#8B5C2A] border-[#8B5C2A]' : 'bg-transparent text-gray-500 border-gray-300 hover:bg-gray-100'}`}
+            onClick={() => setTab('write')}
+          >
+            감정일기 쓰기
+          </button>
+          <button
+            className={`px-1 py-0.5 rounded font-medium text-xs transition-all duration-200 border ${tab === 'mydiary' ? 'bg-white text-[#8B5C2A] border-[#8B5C2A]' : 'bg-transparent text-gray-500 border-gray-300 hover:bg-gray-100'}`}
+            onClick={() => setTab('mydiary')}
+          >
+            내 감정일기
+          </button>
         </div>
+
+        {/* 탭별 내용 */}
+        {tab === 'write' && (
+          <div className="mt-8 space-y-8">
+            {/* 감정 선택 섹션 */}
+            <section className="bg-white rounded-2xl p-6 shadow-lg relative" style={{ zIndex: 10, position: 'relative' }}>
+              <h2 className="text-2xl font-bold text-gray-800 mb-4">
+                오늘의 기분은 어떠세요?
+              </h2>
+              <EmotionSelector 
+                selectedEmotion={selectedEmotion}
+                onEmotionSelect={handleEmotionSelect}
+              />
+            </section>
+
+            {/* 일기 작성 섹션 */}
+            {selectedEmotion && (
+              <section className="bg-white rounded-2xl p-6 shadow-lg animate-slide-up" style={{ zIndex: 10, position: 'relative' }}>
+                <DiaryEditor
+                  emotion={selectedEmotion}
+                  content={diaryContent}
+                  onContentChange={setDiaryContent}
+                  onSubmit={handleDiarySubmit}
+                  isLoading={isLoading}
+                />
+              </section>
+            )}
+
+            {/* 오늘의 다른사람들의 감정은? */}
+            <section className="bg-white rounded-2xl p-6 shadow-lg animate-slide-up mt-8" style={{ zIndex: 10, position: 'relative' }}>
+              <h2 className="text-2xl font-bold text-gray-800 mb-4">오늘의 다른사람들의 감정은?</h2>
+              {/* 여기에 다른 사람들의 감정일기 리스트가 들어갑니다. (임시 더미 데이터) */}
+              <ul className="space-y-4">
+                <li className="p-4 bg-gray-50 rounded-xl border border-gray-200">
+                  <span className="font-semibold text-blue-600 mr-2">😊 행복</span>
+                  오늘은 정말 좋은 하루였어요!<span className="ml-2 text-gray-400 text-sm">(2024-05-01)</span>
+                </li>
+                <li className="p-4 bg-gray-50 rounded-xl border border-gray-200">
+                  <span className="font-semibold text-purple-600 mr-2">😔 슬픔</span>
+                  일이 잘 안 풀려서 속상했어요.<span className="ml-2 text-gray-400 text-sm">(2024-05-01)</span>
+                </li>
+                <li className="p-4 bg-gray-50 rounded-xl border border-gray-200">
+                  <span className="font-semibold text-red-600 mr-2">😤 화남</span>
+                  친구와 다퉈서 기분이 안 좋아요.<span className="ml-2 text-gray-400 text-sm">(2024-05-01)</span>
+                </li>
+              </ul>
+            </section>
+
+            {/* AI 응답 섹션 */}
+            {aiResponse && (
+              <section className="bg-white rounded-2xl p-6 shadow-lg animate-slide-up" style={{ zIndex: 10, position: 'relative' }}>
+                <AIResponse 
+                  emotion={selectedEmotion!}
+                  response={aiResponse}
+                />
+              </section>
+            )}
+          </div>
+        )}
+
+        {tab === 'mydiary' && (
+          <section className="bg-white rounded-2xl p-6 shadow-lg animate-slide-up" style={{ zIndex: 10, position: 'relative' }}>
+            <h2 className="text-4xl font-extrabold mb-6 text-[#8B5C2A] tracking-wide drop-shadow-lg" style={{letterSpacing: '0.04em'}}>
+              내 감정일기
+            </h2>
+            {/* 내 감정일기 목록 (임시 더미 데이터) */}
+            <ul className="space-y-4">
+              <li className="p-4 bg-gray-50 rounded-xl border border-gray-200">
+                <span className="font-semibold text-blue-600 mr-2">😊 행복</span>
+                오늘은 정말 좋은 하루였어요!<span className="ml-2 text-gray-400 text-sm">(2024-05-01)</span>
+              </li>
+              <li className="p-4 bg-gray-50 rounded-xl border border-gray-200">
+                <span className="font-semibold text-purple-600 mr-2">😔 슬픔</span>
+                일이 잘 안 풀려서 속상했어요.<span className="ml-2 text-gray-400 text-sm">(2024-05-01)</span>
+              </li>
+            </ul>
+          </section>
+        )}
       </div>
     </main>
   )

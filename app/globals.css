@@ -16,14 +16,88 @@
   }
 }
 
+/* 전체 UI 크기 업 */
 body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+  background: #F8F5F2;
+  position: relative;
+  min-height: 100vh;
+  font-size: 1.25rem;
+}
+
+input, button, textarea, select {
+  font-size: 1.18rem;
+}
+
+h1 {
+  font-size: 3.2rem;
+}
+h2 {
+  font-size: 2.3rem;
+}
+h3 {
+  font-size: 1.7rem;
+}
+
+section, .bg-white, .rounded-2xl, .shadow-lg {
+  font-size: 1.18rem;
+  padding: 2.2rem 2rem !important;
+  border-radius: 2rem !important;
+}
+
+textarea {
+  min-height: 180px;
+  font-size: 1.18rem;
+  padding: 1.2rem;
+}
+
+button {
+  font-size: 1.18rem;
+  padding: 0.9rem 2.5rem;
+  border-radius: 1.1rem;
+}
+
+.EmotionSelector button, .emotion-btn {
+  font-size: 1.5rem !important;
+  padding: 2rem 1.5rem !important;
+  min-width: 120px;
+  min-height: 90px;
+  border-radius: 1.5rem !important;
+}
+
+.EmotionSelector .text-4xl, .emotion-emoji {
+  font-size: 3.2rem !important;
+}
+
+.EmotionSelector .font-semibold, .emotion-label {
+  font-size: 1.3rem !important;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  width: 200vw;
+  height: 40px;
+  background: #000;
+  transform: translate(-50%, -50%) rotate(155deg);
+  opacity: 0.32;
+  pointer-events: none;
+  z-index: 1;
+}
+
+body::after {
+  content: '';
+  position: fixed;
+  top: 57%;
+  left: 50%;
+  width: 200vw;
+  height: 40px;
+  background: #8B5C2A;
+  transform: translate(-50%, -50%) rotate(155deg);
+  opacity: 0.32;
+  pointer-events: none;
+  z-index: 1;
 }
 
 @layer utilities {
@@ -55,4 +129,104 @@ body {
 
 .bg-anxious-gradient {
   background: linear-gradient(135deg, #FF8E53 0%, #FFB366 100%);
+}
+
+.ball {
+  width: 80px;
+  height: 80px;
+  position: fixed;
+  left: 32px;
+  bottom: 32px;
+  background: #fff;
+  border-radius: 50%;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+}
+
+.ball-q {
+  color: #8B5C2A;
+  font-size: 2.8rem;
+  font-weight: bold;
+  user-select: none;
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0,0,0,0.18);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 20000;
+}
+
+/* 모달도 더 크게 */
+.modal-content {
+  min-width: 340px;
+  padding: 2.2rem 2rem 1.8rem 2rem;
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.modal-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 1rem;
+}
+.modal-input {
+  font-size: 1.25rem;
+  width: 100%;
+  padding: 1rem 1.5rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 1.2rem;
+  margin-bottom: 1rem;
+  outline: none;
+  transition: border 0.2s;
+  background: #fafafa;
+}
+.modal-input:focus {
+  border: 1.5px solid #888;
+}
+
+.modal-submit {
+  font-size: 1.25rem;
+  background: #222;
+  color: #fff;
+  font-weight: 500;
+  padding: 1rem 2.8rem;
+  border: none;
+  border-radius: 6px;
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.modal-submit:hover {
+  background: #444;
+}
+
+.modal-close {
+  position: absolute;
+  top: 0.7rem;
+  right: 1rem;
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  color: #bbb;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+.modal-close:hover {
+  color: #222;
 } 
